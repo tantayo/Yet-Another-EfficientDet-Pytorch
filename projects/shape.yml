@@ -12,3 +12,11 @@ anchors_scales: '[2 ** 0, 2 ** (1.0 / 3.0), 2 ** (2.0 / 3.0)]'
 anchors_ratios: '[(1.0, 1.0), (1.4, 0.7), (0.7, 1.4)]'
 
 obj_list: ['rectangle', 'circle']
+
+#Testing
+threshold: 0.2
+iou_threshold: 0.2
+
+train_data_path: '/home/santiago/projects/torch/build/install/eff_det/datasets/shape/train/'
+val_data_path: '/home/santiago/projects/torch/build/install/eff_det/datasets/shape/val/'
+outpud_dir: '/home/santiago/projects/torch/build/install/eff_det/out/'

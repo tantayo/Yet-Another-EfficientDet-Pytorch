@@ -1,6 +1,7 @@
-import os
+import os, glob
 import torch
 import numpy as np
+import csv
 
 from torch.utils.data import Dataset, DataLoader
 from pycocotools.coco import COCO
@@ -82,6 +83,76 @@ class CocoDataset(Dataset):
 
         return annotations
 
+class KITTIDataset(Dataset):
+    """CSV dataset."""
+
+    def __init__(self, data_path, class_list, transform=None):
+        """
+        Args:
+            train_file (string): CSV file with training annotations
+            annotations (string): CSV file with class list
+            test_file (string, optional): CSV file with testing annotations
+        """
+        self.images_dir = data_path + 'images/'
+        self.labels_dir = data_path + 'labels/'
+        self.class_list = class_list
+        self.transform = transform
+
+        self.labels = {}
+        for label in class_list:
+            self.labels[label]=class_list.index(label)     #labels idx starts with 0
+
+        self.image_names = []
+        self.image_ids = []
+        #os.chdir(self.images_dir)
+        for ext in ('*.gif', '*.png', '*.jpg', '*.PNG', '*.JPG'):
+            image_list = glob.glob(self.images_dir + ext)
+            for image in image_list:
+                self.image_names.append(os.path.basename(image))
+
+        self.image_paths=[];
+        self.label_paths=[];
+        for name in self.image_names:
+            self.image_paths.append(self.images_dir + name)
+            self.label_paths.append(self.labels_dir + name[0:-3] + 'txt')
+
+        self.image_ids = list(range(0, len(self.image_paths)))
+
+    def __len__(self):
+        return len(self.image_ids)
+
+    def __getitem__(self, idx):
+
+        img = self.load_image(idx)
+        annot = self.load_annotations(idx)
+        sample = {'img': img, 'annot': annot}
+        if self.transform:
+            sample = self.transform(sample)
+        return sample
+
+    def load_image(self, image_index):
+        path = self.image_paths[image_index]
+        img = cv2.imread(path)
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        return img.astype(np.float32) / 255.
+
+    def load_annotations(self, image_index):
+        # get ground truth annotations
+        annotations = np.zeros((0, 5))
+
+        path = self.label_paths[image_index]
+        with open(path) as f:
+            f_csv = csv.reader(f, delimiter=' ')
+            for row in f_csv:
+                annotation = np.zeros((1, 5))
+                x1, y1, x2, y2 = map(float, row[4:8])
+                annotation[0, :4] = [x1, y1, x2, y2]
+                label = row[0]
+
+                annotation[0, 4] = self.class_list.index(label)
+                annotations = np.append(annotations, annotation, axis=0)
+
+        return annotations
 
 def collater(data):
     imgs = [s['img'] for s in data]

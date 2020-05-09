@@ -8,8 +8,8 @@ mean: [0.485, 0.456, 0.406]
 std: [0.229, 0.224, 0.225]
 
 # this is coco anchors, change it if necessary
-anchors_scales: '[2 ** 0, 2 ** (1.0 / 3.0), 2 ** (2.0 / 3.0)]'
-anchors_ratios: '[(1.0, 1.0), (1.4, 0.7), (0.7, 1.4)]'
+anchor_scales: '[2 ** 0, 2 ** (1.0 / 3.0), 2 ** (2.0 / 3.0)]'
+anchor_ratios: '[(1.0, 1.0), (1.4, 0.7), (0.7, 1.4)]'
 
 # must match your dataset's category_id.
 # category_id is one_indexed,
@@ -24,3 +24,13 @@ obj_list: ['person', 'bicycle', 'car', 'motorcycle', 'airplane', 'bus', 'train',
            'laptop', 'mouse', 'remote', 'keyboard', 'cell phone', 'microwave', 'oven', 'toaster', 'sink',
            'refrigerator', '', 'book', 'clock', 'vase', 'scissors', 'teddy bear', 'hair drier',
            'toothbrush']
+
+#Testing
+threshold: 0.2
+iou_threshold: 0.2
+
+train_data_path: '/home/santiago/data/ndd/gvdl/train/'
+val_data_path: '/home/santiago/data/ndd/gvdl/val/'
+
+valiadtion_images: '/home/santiago/data/ndd/gvdl/val/images/'
+outpud_dir: '/home/santiago/projects/torch/build/install/eff_det/out/'

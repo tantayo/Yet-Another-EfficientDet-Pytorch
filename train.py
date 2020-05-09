@@ -12,7 +12,7 @@ import yaml
 from torch import nn
 from torch.utils.data import DataLoader
 from torchvision import transforms
-from efficientdet.dataset import CocoDataset, Resizer, Normalizer, Augmenter, collater
+from efficientdet.dataset import CocoDataset, KITTIDataset, Resizer, Normalizer, Augmenter, collater
 from backbone import EfficientDetBackbone
 from tensorboardX import SummaryWriter
 import numpy as np
@@ -109,19 +109,25 @@ def train(opt):
                   'num_workers': opt.num_workers}
 
     input_sizes = [512, 640, 768, 896, 1024, 1280, 1280, 1536]
-    training_set = CocoDataset(root_dir=os.path.join(opt.data_path, params.project_name), set=params.train_set,
-                               transform=transforms.Compose([Normalizer(mean=params.mean, std=params.std),
-                                                             Augmenter(),
-                                                             Resizer(input_sizes[opt.compound_coef])]))
-    training_generator = DataLoader(training_set, **training_params)
 
-    val_set = CocoDataset(root_dir=os.path.join(opt.data_path, params.project_name), set=params.val_set,
-                          transform=transforms.Compose([Normalizer(mean=params.mean, std=params.std),
-                                                        Resizer(input_sizes[opt.compound_coef])]))
+    if params.project_name == 'coco' or params.project_name == 'shape':
+        training_set = CocoDataset(root_dir=os.path.join(opt.data_path, params.project_name), set=params.train_set,
+            transform=transforms.Compose([Normalizer(mean=params.mean, std=params.std), Augmenter(), Resizer(input_sizes[opt.compound_coef])]))
+
+        val_set = CocoDataset(root_dir=os.path.join(opt.data_path, params.project_name), set=params.val_set,
+            transform=transforms.Compose([Normalizer(mean=params.mean, std=params.std), Resizer(input_sizes[opt.compound_coef])]))
+    else:
+        training_set = KITTIDataset(data_path=params.train_data_path, class_list = params.obj_list,
+            transform=transforms.Compose([Normalizer(mean=params.mean, std=params.std), Augmenter(), Resizer(input_sizes[opt.compound_coef])]))
+
+        val_set = KITTIDataset(data_path=params.val_data_path, class_list = params.obj_list,
+            transform=transforms.Compose([Normalizer(mean=params.mean, std=params.std), Resizer(input_sizes[opt.compound_coef])]))
+
+    training_generator = DataLoader(training_set, **training_params)
     val_generator = DataLoader(val_set, **val_params)
 
     model = EfficientDetBackbone(num_classes=len(params.obj_list), compound_coef=opt.compound_coef,
-                                 ratios=eval(params.anchors_ratios), scales=eval(params.anchors_scales))
+        ratios=eval(params.anchors_ratios), scales=eval(params.anchors_scales))
 
     # load last weights
     if opt.load_weights is not None:
