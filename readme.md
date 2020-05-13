@@ -4,19 +4,19 @@
 ## Inference
 
     python neu_efficientdet_test.py -p pills -b 5 --show_images True
-> -p Project file with configuration oparameters \
-> -c Efficientdet coefficient (for now) \
-> -b Batch size (Default: 10) \
-> -s Save predictions (Saves on data validation folder under 'neupreds/' unless `preds_path` is specified for the project) \
-> --show_images Displays images with bboxes \
-> --save_images Saves images with bboxes to project output directory
+> -p: Project file with configuration oparameters \
+> -c: Efficientdet coefficient (for now) \
+> -b: Batch size (Default: 10) \
+> -s: Save predictions (Saves on data validation folder under 'neupreds/' unless `preds_path` is specified for the project) \
+> --show_images: Displays images with bboxes \
+> --save_images: Saves images with bboxes to project output directory
 
 ## Performance metrics
 
     python run_coco_metrics.py -p pills -t 0.5 -m 100
-> -p Project file with configuration oparameters \
-> -t Target IOU \
-> -m Max detections (Currently disabled)
+> -p: Project file with configuration oparameters \
+> -t: Target IOU \
+> -m: Max detections (Currently disabled)
 
     Will look for predictions @ val_data_path/neupreds/ if no 'preds_path' is specified on the project
 
