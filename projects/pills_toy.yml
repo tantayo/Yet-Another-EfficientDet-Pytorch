@@ -19,8 +19,5 @@ threshold: 0.2
 iou_threshold: 0.2
 
 train_data_path: '/home/santiago/data/ndd/pills/train/'
-val_data_path: '/home/santiago/data/ndd/pills/val/'
+val_data_path: '/home/santiago/data/ndd/pills/val_toy/'
 outpud_dir: '/home/santiago/projects/torch/build/install/eff_det/out/'
-
-#Metrics
-#preds_path: '/home/santiago/data/ndd/pills/val/cvpred/'

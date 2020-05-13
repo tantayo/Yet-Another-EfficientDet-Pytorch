@@ -1,3 +1,31 @@
+# Custumization notes
+
+
+## Inference
+
+python neu_efficientdet_test.py -p pills -b 5 --show_images True
+    -p Project file with configuration oparameters
+    -c Efficientdet coefficient (for now)
+    -b Batch size (Default: 10)
+    -s Save predictions (Saves on data validation folder under 'neupreds/' unless `preds_path` is specified for the project)
+    --show_images Displays images with bboxes
+    --save_images Saves images with bboxes to project output directory
+
+## Performance metrics
+
+python run_coco_metrics.py -p pills -t 0.5 -m 100
+    -p Project file with configuration oparameters
+    -t Target IOU
+    -m Max detections (Currently disabled)
+
+    Will look for predictions @ val_data_path/neupreds/ if no 'preds_path' is specified on the project
+
+## Pretrained weights and benchmark
+
+For now training/fine tuning goes as in the original repo by using the existing or creating your own project (yml configuration file)
+
+
+
 # Yet Another EfficientDet Pytorch
 
 The pytorch re-implement of the official [EfficientDet](https://github.com/google/automl/tree/master/efficientdet) with SOTA performance in real time, original paper link: https://arxiv.org/abs/1911.09070
@@ -329,12 +357,6 @@ Appreciate the great work from the following repositories:
 - [lukemelas/EfficientNet-PyTorch](https://github.com/lukemelas/EfficientNet-PyTorch)
 - [signatrix/efficientdet](https://github.com/signatrix/efficientdet)
 - [vacancy/Synchronized-BatchNorm-PyTorch](https://github.com/vacancy/Synchronized-BatchNorm-PyTorch)
-
-## Donation
-
-If you like this repository, or if you'd like to support the author for any reason, you can donate to the author. Feel free to send me your name or introducing pages, I will make sure your name(s) on the sponsors list. 
-
-<img src="https://raw.githubusercontent.com/zylo117/Yet-Another-Efficient-Pytorch/master/res/alipay.jpg" width="360">
 
 ## Sponsors
 
