@@ -20,7 +20,7 @@
 
     Will look for predictions @ val_data_path/neupreds/ if no 'preds_path' is specified on the project
 
-## Pretrained weights and benchmark
+## Training
 
 For now training/fine -tuning goes as in the original repo by using the existing or creating your own project (yml configuration file)
 
